@@ -6,7 +6,6 @@
   "description": "Watchman, the chatbot for hackathon",
   "dependencies": {
     "hubot": "^2.19.0",
-    "hubot-diagnostics": "0.0.1",
     "hubot-glip": "^0.5.0",
     "hubot-help": "^0.2.0",
     "hubot-redis-brain": "0.0.3"
