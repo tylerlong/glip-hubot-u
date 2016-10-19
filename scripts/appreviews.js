@@ -9,7 +9,7 @@ module.exports = (robot) => {
         const json = JSON.parse(body);
         let result = `#.\tRating\tTitle\n`;
         result += _.tail(json.feed.entry).map((entry, index) => {
-          return `#${index + 1}.\t${'*'.repeat(entry['im:rating'].label)}\t${entry.title.label}`;
+          return `#${index + 1}.\t${' ⭐️ '.repeat(entry['im:rating'].label)}\t${entry.title.label}`;
         }).join('\n');
         res.send(result);
       }
@@ -21,7 +21,7 @@ module.exports = (robot) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
         const entry = json.feed.entry[res.match[1]]
-        let result = `${'*'.repeat(entry['im:rating'].label)}\t${entry.title.label}\n\n${entry.content.label}`
+        let result = `${' ⭐ '.repeat(entry['im:rating'].label)}\t${entry.title.label}\n\n${entry.content.label}`
         res.send(result);
       }
     });
