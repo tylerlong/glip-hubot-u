@@ -29,8 +29,8 @@ module.exports = (robot) => {
     });
   });
 
-  robot.respond(/markdown$/i, (res) => {
-    send_markdown('# hello world', robot, res);
+  robot.respond(/markdown (.+?)$/i, (res) => {
+    send_markdown(res.match[1], robot, res);
   });
 
 }
