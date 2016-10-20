@@ -5,6 +5,7 @@
   "author": "Tyler Long <tyler4long@gmail.com>",
   "description": "Watchman, the chatbot for hackathon",
   "dependencies": {
+    "coffee-script": "~1.6",
     "hubot": "^2.19.0",
     "hubot-glip": "^0.5.0",
     "hubot-help": "^0.2.0",
