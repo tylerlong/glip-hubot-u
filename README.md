@@ -1,6 +1,6 @@
-＃ glip-hubot-w
+＃ glip-hubot-u
 
-Watchman is a Glip chatbot for hackathon.
+Ultimate/Universal bot.
 
 
 ## todo

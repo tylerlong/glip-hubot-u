@@ -1,1 +1,1 @@
-web: bin/hubot -a glip -n w
+web: bin/hubot -a glip -n u
