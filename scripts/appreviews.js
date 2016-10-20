@@ -33,4 +33,8 @@ module.exports = (robot) => {
     send_markdown(res.match[1], robot, res);
   });
 
+  robot.respond(/test$/i, (res) => {
+    send_markdown('```json\n' + JSON.stringify(robot.listeners, null, '\t') + '\n```', robot, res)
+  });
+
 }
