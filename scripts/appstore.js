@@ -23,20 +23,41 @@ const getApps = (robot) => {
   return apps;
 };
 
+const getInstalledApps = (apps = null, robot, res) => {
+  if(apps == null) {
+    apps = getApps();
+  }
+  const installedApps = Object.keys(robot.brain.data.appstore[res.envelope.room] || {});
+
+  // 移除已经从总列表消失的 app
+  _.remove(installedApps, (app) => { return !_.includes(apps, app) });
+  return installedApps;
+}
+
 
 module.exports = (robot) => {
 
   // list app of the apps
-  robot.hear(/^app list$/, { id: APP_NAME }, (res) => {
+  robot.hear(/^app list$/i, { id: APP_NAME }, (res) => {
     // app 列表
     const apps = getApps(robot);
 
-    // 格式化并发送
-    res.send(_.map(apps, (app) => { return '* ' + app }).join('\n'));
+    let result = '';
+
+    // 已安装的 app
+    const installedApps = getInstalledApps(apps, robot, res);
+    if(installedApps.length > 0) {
+      result += `**Installed Apps**\n${_.map(installedApps, (app) => { return '* ' + app }).join('\n')}\n\n`;
+    }
+
+    // 所有的 app
+    result += `**All Apps**\n${_.map(apps, (app) => { return '* ' + app }).join('\n')}`;
+
+    res.send(result);
   });
 
   // install app
-  robot.hear(/^app install (.+?)$/, { id: APP_NAME }, (res) => {
+  robot.hear(/^app (?:install|add) (.+?)$/i, { id: APP_NAME }, (res) => {
     // 用户输入的 app name
     const app = res.match[1].trim();
 
@@ -45,14 +66,37 @@ module.exports = (robot) => {
 
     // 用户输入有误
     if(!_.includes(apps, app)) {
-      res.send('Unknown app');
+      res.send(`Unknown app: **${app}**, did you make a typo?`);
       return;
     }
 
     // install app to current room
     robot.brain.data.appstore[res.envelope.room] = robot.brain.data.appstore[res.envelope.room] || {};
     robot.brain.data.appstore[res.envelope.room][app] = true;
-    res.send('App installed');
+    res.send(`App **${app}** has been installed.`);
+  });
+
+  robot.hear(/^app (?:uninstall|remove) (.+?)$/i, { id: APP_NAME }, (res) => {
+    const app = res.match[1].trim();
+    const apps = getApps(robot);
+
+    // 用户输入有误
+    if (!_.includes(apps, app)) {
+      res.send(`Unknown app: **${app}**, did you make a typo?`);
+      return;
+    }
+
+    const installedApps = getInstalledApps(apps, robot, res);
+
+    if (!_.includes(installedApps, app)) {
+      res.send(`App **${app}** isn't installed.`);
+      return;
+    }
+
+    robot.brain.data.appstore[res.envelope.room] = robot.brain.data.appstore[res.envelope.room] || {};
+    delete robot.brain.data.appstore[res.envelope.room][app];
+
+    res.send(`App **${app}** has been uninstalled.`);
   });
 
 }

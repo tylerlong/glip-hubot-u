@@ -36,12 +36,4 @@ module.exports = (robot) => {
     send_markdown(res.match[1], robot, res);
   });
 
-  robot.respond(/bad$/i, { id: 'bad' }, (res) => {
-    res.send('bad');
-  });
-
-  robot.respond(/good$/i, { id: 'good' }, (res) => {
-    res.send('good');
-  });
-
 }
