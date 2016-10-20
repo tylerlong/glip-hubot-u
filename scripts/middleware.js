@@ -22,8 +22,9 @@ module.exports = function(robot) {
       next(done);
     } else {
       // 不在白名单
+      // 提示用户安装
+      robot.send({ user: { reply_to: room }}, `You haven't installed ${app}`);
       done();
-      // todo: 提示用户安装？
     }
   });
 

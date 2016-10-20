@@ -8,7 +8,7 @@ const { send_markdown } = require('../markdown');
 
 module.exports = (robot) => {
 
-  robot.respond(/reviews$/i, (res) => {
+  robot.respond(/reviews$/i, { id: 'appreviews' }, (res) => {
     request({ url: 'https://itunes.apple.com/us/rss/customerreviews/page=1/sortBy=mostRecent/id=715886894/json' }, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
@@ -21,7 +21,7 @@ module.exports = (robot) => {
     });
   });
 
-  robot.respond(/reviews (\d+)$/i, (res) => {
+  robot.respond(/reviews (\d+)$/i, { id: 'appreviews' }, (res) => {
     request({ url: 'https://itunes.apple.com/us/rss/customerreviews/page=1/sortBy=mostRecent/id=715886894/json' }, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
@@ -32,7 +32,7 @@ module.exports = (robot) => {
     });
   });
 
-  robot.respond(/markdown (.+?)$/i, (res) => {
+  robot.respond(/markdown (.+?)$/i, { id: 'markdown' }, (res) => {
     send_markdown(res.match[1], robot, res);
   });
 
