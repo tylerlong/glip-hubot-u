@@ -1,8 +1,8 @@
-＃ glip-hubot-u
+# glip-hubot-u
 
 Ultimate/Universal bot.
 
 
 ## todo
 
-nunjucks to write markdown template
+- nunjucks to write markdown template.
