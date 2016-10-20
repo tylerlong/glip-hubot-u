@@ -23,7 +23,7 @@ module.exports = function(robot) {
     } else {
       // 不在白名单
       // 提示用户安装
-      robot.send({ user: { reply_to: room }}, `You haven't installed ${app}`);
+      robot.send({ user: { reply_to: room }}, `The feature you requested is supported by app **${app}**.\nYou can install it by replying **app install ${app}**.`);
       done();
     }
   });
