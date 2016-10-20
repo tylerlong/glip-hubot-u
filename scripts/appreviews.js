@@ -1,3 +1,6 @@
+// Description:
+//   Show glip app reviews
+//
 const request = require('request');
 const _ = require('lodash');
 const { send_markdown } = require('../markdown');
@@ -33,8 +36,12 @@ module.exports = (robot) => {
     send_markdown(res.match[1], robot, res);
   });
 
-  robot.respond(/test$/i, (res) => {
-    send_markdown('```json\n' + JSON.stringify(robot.listeners, null, '\t') + '\n```', robot, res)
+  robot.respond(/bad$/i, { id: 'bad' }, (res) => {
+    res.send('bad');
+  });
+
+  robot.respond(/good$/i, { id: 'good' }, (res) => {
+    res.send('good');
   });
 
 }
