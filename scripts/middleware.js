@@ -10,8 +10,8 @@ module.exports = function(robot) {
     const room = context.response.envelope.room;
     const app = context.listener.options.id;
 
-    // 不要误杀 appstore
-    if(app == 'appstore') {
+    // 不要误杀 appstore 和 help
+    if(app == 'appstore' || app == 'help') {
       next(done);
       return;
     }

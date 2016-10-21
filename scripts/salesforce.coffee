@@ -5,18 +5,16 @@
 #   None
 #
 # Configuration:
-#   SF_INSTANCE_URL = url of your salesforce instance eg. https://na2.salesforce.com
+#    SF_INSTANCE_URL = url of your salesforce instance eg. https://na2.salesforce.com
 #    SF_CONSUMER_KEY = consumer key from the Remote Access Setup page in Salesforce
 #    SF_CONSUMER_SECRET = consumer secret from the Remote Access Setup page in Salesforce
 #    SF_USERNAME = a valid salesforce login
 #    SF_PASSWORD = password and security token mashed together
 #
 # Commands:
-#   hubot salesforce account <accountname> - searches for the account by name in Salesforce and displays all matches
-#   hubot salesforce query <query> - runs an arbitrary SOQL query and outputs the results
-#
-# Author:
-#   lnediger
+#   salesforce account <account_name> - searches for the account by name in Salesforce and displays all matches
+#   salesforce query <query> - runs an arbitrary SOQL query and outputs the results
+
 
 sf_instance = process.env.SF_INSTANCE_URL
 sf_consumer_key = process.env.SF_CONSUMER_KEY
@@ -31,7 +29,7 @@ http = require 'http'
 
 
 module.exports = (robot) ->
-  robot.respond /salesforce query (.*)$/i, { id: 'salesforce' }, (msg) ->
+  robot.hear /^salesforce query (.*)$/i, { id: 'salesforce' }, (msg) ->
     query = msg.match[1]
 
     msg.http(auth_url).post() (err, res, body) ->
@@ -62,7 +60,7 @@ module.exports = (robot) ->
               message += result_string.substring(0, result_string.length-1) + '\n'
             msg.send message
 
-  robot.respond /salesforce account (.*)$/i, { id: 'salesforce' }, (msg) ->
+  robot.hear /^salesforce account (.*)$/i, { id: 'salesforce' }, (msg) ->
     acct_name = msg.match[1]
 
     msg.http(auth_url).post() (err, res, body) ->
