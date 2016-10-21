@@ -12,10 +12,10 @@ module.exports = (robot) => {
     console.log(installedApps);
     const regexStr = '/^' + installedApps.join('\\s+|^') + '\\b/';
     const regex = eval(regexStr);
-    const commands = robot.helpCommands();
+    let commands = robot.helpCommands();
     console.log(commands);
-    _.remove(commands, (command) => {
-      return command.match(regex) == null;
+    commands = _.filter(commands, (command) => {
+      return command.match(regex) != null;
     });
     console.log(commands);
     res.send(commands.join('\n'));

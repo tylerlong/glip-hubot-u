@@ -14,11 +14,9 @@ const getApps = (robot) => {
   })).sort();
 
   // 把当前 appstore, help 从列表移除
-  _.remove(apps, (app) => {
-    return app == "appstore" || app == "help";
+  return _.filter(apps, (app) => {
+    return app != "appstore" && app != "help";
   });
-
-  return apps;
 };
 
 const getInstalledApps = (apps = null, robot, res) => {
@@ -28,8 +26,7 @@ const getInstalledApps = (apps = null, robot, res) => {
   const installedApps = Object.keys(robot.brain.data.appstore[res.envelope.room] || {});
 
   // 移除已经从总列表消失的 app
-  _.remove(installedApps, (app) => { return !_.includes(apps, app) });
-  return installedApps;
+  return _.filter(installedApps, (app) => { return _.includes(apps, app) });
 }
 
 
