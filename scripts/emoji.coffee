@@ -2,13 +2,13 @@
 #   show emojis http://emojione.com/demo/
 #
 # Commands:
-#   hubot emoji <dog> <cat> ... - show emojis. http://emojione.com/demo/
+#   emoji <emoji_name> ... - show 128*128 emoji image. http://emojione.com/demo/
 
 emojione = require('emojione')
 emojione.cacheBustParam = ''
 
 module.exports = (robot) ->
-  robot.respond /emoji((?:\s+[0-9a-z_]+)+)\s*$/i, { id: 'emoji' }, (res) ->
+  robot.hear /^emoji((?:\s+[0-9a-z_]+)+)\s*$/i, { id: 'emoji' }, (res) ->
     emojis = res.match[1].trim().split(/\s+/)
     for emoji in emojis
       image = emojione.shortnameToImage(":#{emoji}:")

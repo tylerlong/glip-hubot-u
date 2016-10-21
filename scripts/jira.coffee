@@ -14,12 +14,8 @@
 #   HUBOT_JIRA_IGNORE_USERS (optional, format: "user1|user2", default is "jira|github")
 #
 # Commands:
-#   hubot move jira <issue ID> to <status> - Changes the status of <issue ID> to <status>
-#   hubot jira status - List the available statuses
-#
-# Author:
-#   rustedgrail
-#   stuartf
+#   jira move <issue ID> to <status> - Changes the status of <issue ID> to <status>
+#   jira status - List the available statuses
 
 module.exports = (robot) ->
   cache = []
@@ -49,7 +45,7 @@ module.exports = (robot) ->
         jiraPattern += "i"
       jiraPattern = eval(jiraPattern)
 
-      robot.hear /move jira (.+) to (.+)/, id:'JIRA' , (msg) ->
+      robot.hear /^jira move (.+) to (.+)/, id:'jira' , (msg) ->
         issue = msg.match[1]
         msg.send "Getting transitions for #{issue}"
         robot.http(jiraUrl + "/rest/api/2/issue/#{issue}/transitions")
@@ -68,7 +64,7 @@ module.exports = (robot) ->
               })) (err, res, body) ->
                 msg.send if res.statusCode == 204 then "Success!" else body
 
-      robot.hear /jira status/, id:'JIRA', (msg) ->
+      robot.hear /^jira status/, id:'jira', (msg) ->
         robot.http(jiraUrl + "/rest/api/2/status")
         .auth(auth).get() (err, res, body) ->
           response = "/code "
@@ -76,7 +72,7 @@ module.exports = (robot) ->
             response += status.name + ": " + status.description + '\n'
           msg.send response
 
-      robot.hear jiraPattern, id:'JIRA', (msg) ->
+      robot.hear jiraPattern, id:'jira', (msg) ->
         return if msg.message.user.name.match(new RegExp(jiraIgnoreUsers, "gi"))
         return if msg.message.text.match(new RegExp(/move jira (.+) to (.+)/))
 

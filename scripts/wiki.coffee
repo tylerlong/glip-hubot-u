@@ -1,5 +1,3 @@
-# Description:
-#   None
 #
 # Dependencies:
 #   "htmlparser": "1.7.6"
@@ -7,14 +5,9 @@
 #   "underscore": "1.3.3"
 #   "underscore.string": "2.3.0"
 #
-# Configuration:
-#   None
-#
 # Commands:
-#   hubot wiki me <query> - Searches for <query> on Wikipedia.
-#
-# Author:
-#   h3h
+#   wiki <query> - Searches for <query> on Wikipedia.
+
 
 _          = require("underscore")
 _s         = require("underscore.string")
@@ -22,8 +15,8 @@ Select     = require("soupselect").select
 HTMLParser = require "htmlparser"
 
 module.exports = (robot) ->
-  robot.respond /(wiki)( me)? (.*)/i, id:'Wiki', (msg) ->
-    wikiMe robot, msg.match[3], (text, url) ->
+  robot.hear /^wiki (.+)/i, id:'wiki', (msg) ->
+    wikiMe robot, msg.match[1], (text, url) ->
       msg.send text
       msg.send url if url
 

@@ -2,13 +2,13 @@
 #   Get a stock price
 #
 # Commands:
-#   hubot stock <ticker> - Get a stock price
-#   hubot stock chart <ticker> [1d|5d|2w|1mon|1y] - Get a stock price and chart
+#   stock <ticker> - Get a stock price
+#   stock chart <ticker> [1d|5d|2w|1mon|1y] - Get a stock price and chart
 
 
 module.exports = (robot) ->
 
-  robot.respond /stock (\S+)$/i, { id: 'stock' }, (msg) ->
+  robot.hear /^stock (\S+)$/i, { id: 'stock' }, (msg) ->
     ticker = escape(msg.match[1])
     msg.http('http://finance.google.com/finance/info?client=ig&q=' + ticker)
     .get() (err, res, body) ->
@@ -18,7 +18,7 @@ module.exports = (robot) ->
       catch error
         msg.send "Error fetching stock :( " + err
 
-  robot.respond /stock chart\s?@?([A-Za-z0-9.-_]+)\s?(\d+\w+)?/i, { id: 'stock' }, (msg) ->
+  robot.hear /^stock chart\s?@?([A-Za-z0-9.-_]+)\s?(\d+\w+)?/i, { id: 'stock' }, (msg) ->
     ticker = escape(msg.match[1])
     time = msg.match[2] || '1d'
     msg.http('http://finance.google.com/finance/info?client=ig&q=' + ticker)
