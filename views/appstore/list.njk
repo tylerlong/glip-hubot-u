@@ -1,5 +1,3 @@
-
-
 {% if installedApps|length %}
 
 **Installed apps**
@@ -13,19 +11,9 @@
 {% endfor %}
 
 {% else %}
-
-<table style="width:100%">
+**All the apps**
 {% for app in apps %}
-<tr>
-  <th>
-* {{ appMetadata.apps[app].displayName }}
-  </th>
-  <th>
-    <image src="{{ appMetadata.apps[app].image }}" width="100px"></image>
-  </th>
-</tr>
+* {{ app }}
 {% endfor %}
-</table>
+
 {% endif %}
-
-

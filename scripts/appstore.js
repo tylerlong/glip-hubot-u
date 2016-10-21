@@ -20,8 +20,7 @@ module.exports = (robot) => {
     // other apps
     const otherApps = _.difference(apps, installedApps);
     const markdown = engine.render('appstore/list.njk', { apps, installedApps, otherApps, appMetadata });
-    send_markdown(engine.render('appstore/list.njk', { apps, installedApps, otherApps, appMetadata }),
-      robot, res);
+    res.send(markdown);
   });
 
   // install app
