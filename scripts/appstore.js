@@ -1,9 +1,12 @@
 const _ = require('lodash');
 const { engine } = require('../nunjucks');
+const uuid = require('uuid');
+const spawn = require('child_process').spawnSync;
+const appMetadata = require('../app_metadata');
+const {send_markdown} = require('../markdown');
 
 
 const APP_NAME = 'appstore';
-
 
 // helper method: app list
 const getApps = (robot) => {
@@ -12,10 +15,14 @@ const getApps = (robot) => {
     return listener.options.id != null;
   });
 
+
+
   // app 列表，去重、排序
   const apps = _.uniq(_.map(namedListeners, (listener) => {
     return listener.options.id;
   })).sort();
+
+
 
   // 把当前 app 也就是 appstore 从列表移除
   _.remove(apps, (app) => {
@@ -47,8 +54,9 @@ module.exports = (robot) => {
     const installedApps = getInstalledApps(apps, robot, res);
     // other apps
     const otherApps = _.difference(apps, installedApps);
-
-    res.send(engine.render('appstore/list.njk', { apps, installedApps, otherApps }));
+    const markdown = engine.render('appstore/list.njk', { apps, installedApps, otherApps, appMetadata });
+    send_markdown(engine.render('appstore/list.njk', { apps, installedApps, otherApps, appMetadata }),
+      robot, res);
   });
 
   // install app
