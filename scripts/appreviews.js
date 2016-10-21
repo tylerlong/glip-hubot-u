@@ -3,7 +3,6 @@
 //
 const request = require('request');
 const _ = require('lodash');
-const { send_markdown } = require('../markdown');
 
 
 module.exports = (robot) => {
@@ -30,10 +29,6 @@ module.exports = (robot) => {
         res.send(result);
       }
     });
-  });
-
-  robot.respond(/markdown (.+?)$/i, { id: 'markdown' }, (res) => {
-    send_markdown(res.match[1], robot, res);
   });
 
 }
