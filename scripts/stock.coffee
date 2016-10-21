@@ -2,8 +2,8 @@
 #   Get a stock price
 #
 # Commands:
-#   hubot stock <ticker> - Get a stock price
-#   hubot stock chart <ticker> [1d|5d|2w|1mon|1y] - Get a stock price and chart
+#   stock <ticker> - Get a stock price
+#   stock chart <ticker> [1d|5d|2w|1mon|1y] - Get a stock price and chart
 
 
 module.exports = (robot) ->
