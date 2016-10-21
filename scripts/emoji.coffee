@@ -2,7 +2,7 @@
 #   show emojis http://emojione.com/demo/
 #
 # Commands:
-#   emoji <dog> <cat> ... - show emojis. http://emojione.com/demo/
+#   emoji <dog> <cat> ... - show 128*128 emojis. http://emojione.com/demo/
 
 emojione = require('emojione')
 emojione.cacheBustParam = ''

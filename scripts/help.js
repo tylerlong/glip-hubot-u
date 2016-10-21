@@ -1,3 +1,6 @@
+// Commands:
+//   help - show help information
+
 const _ = require('lodash');
 const { getApps, getInstalledApps } = require('../apps');
 
