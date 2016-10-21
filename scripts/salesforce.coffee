@@ -31,7 +31,7 @@ http = require 'http'
 
 
 module.exports = (robot) ->
-  robot.respond /salesforce query (.*)$/i, (msg) ->
+  robot.respond /salesforce query (.*)$/i, { id: 'salesforce' }, (msg) ->
     query = msg.match[1]
 
     msg.http(auth_url).post() (err, res, body) ->
@@ -51,7 +51,7 @@ module.exports = (robot) ->
           if results.records == undefined || results.records.length == 0
             msg.send "No results found!"
           else
-            msg.send "Found #{results.records.length} results(s) of type #{results.records[0].attributes.type}"
+            message = "Found #{results.records.length} results(s) of type #{results.records[0].attributes.type}\n"
             for result in results.records
               result_string = ""
 
@@ -59,9 +59,10 @@ module.exports = (robot) ->
                 if key != "attributes"
                   result_string += "#{key} : #{result[key]}, "
 
-              msg.send result_string.substring(0, result_string.length-1)
+              message += result_string.substring(0, result_string.length-1) + '\n'
+            msg.send message
 
-  robot.respond /salesforce account (.*)$/i, (msg) ->
+  robot.respond /salesforce account (.*)$/i, { id: 'salesforce' }, (msg) ->
     acct_name = msg.match[1]
 
     msg.http(auth_url).post() (err, res, body) ->
@@ -81,6 +82,7 @@ module.exports = (robot) ->
           if accounts.records == undefined || accounts.records.length == 0
             msg.send "No accounts found!"
           else
-            msg.send "Found #{accounts.records.length} Account(s) matching '#{acct_name}'"
+            message = "Found #{accounts.records.length} Account(s) matching '#{acct_name}'\n"
             for account in accounts.records
-              msg.send "Owner: #{account.Owner.Name}, Name: #{account.Name}, Phone: #{account.Phone}, Id: #{account.Id}"
+              message += "Owner: #{account.Owner.Name}, Name: #{account.Name}, Phone: #{account.Phone}, Id: #{account.Id}\n"
+            msg.send message
