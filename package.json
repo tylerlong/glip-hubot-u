@@ -9,7 +9,7 @@
     "emojione": "^2.2.6",
     "htmlparser": "1.7.6",
     "hubot": "^2.19.0",
-    "hubot-glip": "^0.5.0",
+    "hubot-glip": "^0.6.0",
     "hubot-redis-brain": "0.0.3",
     "lodash": "^4.16.4",
     "mathjs": "^3.5.3",

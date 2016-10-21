@@ -7,6 +7,13 @@ module.exports = function(robot) {
   robot.brain.data.appstore = robot.brain.data.appstore || {};
 
   robot.listenerMiddleware(function(context, next, done){
+
+    // don't process message posted by bot itself
+    if(context.response.envelope.user.id == robot.adapter.client.user_id) {
+      done();
+      return;
+    }
+
     const room = context.response.envelope.room;
     const app = context.listener.options.id;
 
@@ -22,10 +29,6 @@ module.exports = function(robot) {
       next(done);
     } else {
       // 不在白名单
-      // 提示用户安装
-      if(app != null) {
-        robot.send({ user: { reply_to: room }}, `The feature you requested is supported by app **${app}**.\nYou can install it by replying **app install ${app}**.`);
-      }
       done();
     }
   });
