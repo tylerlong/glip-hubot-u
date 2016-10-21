@@ -1,6 +1,10 @@
 const _ = require('lodash');
 const { getApps, getInstalledApps } = require('../apps');
 const { engine } = require('../nunjucks');
+const uuid = require('uuid');
+const spawn = require('child_process').spawnSync;
+const appMetadata = require('../app_metadata');
+const {send_markdown} = require('../markdown');
 
 
 const APP_NAME = 'appstore';
@@ -15,8 +19,9 @@ module.exports = (robot) => {
     const installedApps = getInstalledApps(apps, robot, res);
     // other apps
     const otherApps = _.difference(apps, installedApps);
-
-    res.send(engine.render('appstore/list.njk', { apps, installedApps, otherApps }));
+    const markdown = engine.render('appstore/list.njk', { apps, installedApps, otherApps, appMetadata });
+    send_markdown(engine.render('appstore/list.njk', { apps, installedApps, otherApps, appMetadata }),
+      robot, res);
   });
 
   // install app
