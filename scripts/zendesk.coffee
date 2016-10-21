@@ -7,17 +7,9 @@
 #   HUBOT_ZENDESK_SUBDOMAIN
 #
 # Commands:
-#   zendesk (all) tickets - returns the total count of all unsolved tickets. The 'all' keyword is optional.
-#   zendesk new tickets - returns the count of all new (unassigned) tickets
-#   zendesk open tickets - returns the count of all open tickets
-#   zendesk escalated tickets - returns a count of tickets with escalated tag that are open or pending
-#   zendesk pending tickets - returns a count of tickets that are pending
-#   zendesk list (all) tickets - returns a list of all unsolved tickets. The 'all' keyword is optional.
-#   zendesk list new tickets - returns a list of all new tickets
-#   zendesk list open tickets - returns a list of all open tickets
-#   zendesk list pending tickets - returns a list of pending tickets
-#   zendesk list escalated tickets - returns a list of escalated tickets
-#   zendesk ticket <ID> - returns information about the specified ticket
+#   zendesk count unsolved/new/open/pending/escalated - returns the count of unsolved/new/open/pending/escalated tickets
+#   zendesk list unsolved/new/open/pending/escalated - returns a list of unsolved/new/open/pending/escalated tickets, maximium 100 tickets returned
+#   zendesk get <ID> - returns information about the specified ticket
 
 sys = require 'sys' # Used for debugging
 tickets_url = "https://#{process.env.HUBOT_ZENDESK_SUBDOMAIN}.zendesk.com/tickets"
@@ -66,66 +58,27 @@ zendesk_user = (msg, user_id) ->
 
 module.exports = (robot) ->
 
-  robot.hear /^(?:zendesk|zd) (all )?tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.unsolved, (results) ->
-      ticket_count = results.count
-      msg.send "#{ticket_count} unsolved tickets"
+  robot.hear /^zendesk count (unsolved|new|open|pending|escalated)/i, { id: 'zendesk' }, (res) ->
+    zendesk_request res, queries[res.match[1]], (results) ->
+      res.send "#{results.count} #{res.match[1]} tickets"
 
-  robot.hear /^(?:zendesk|zd) pending tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.pending, (results) ->
-      ticket_count = results.count
-      msg.send "#{ticket_count} unsolved tickets"
+  robot.hear /^zendesk list (unsolved|new|open|pending|escalated)/i, { id: 'zendesk' }, (res) ->
+    zendesk_request res, queries[res.match[1]], (results) ->
+      message = ''
+      for result in results.results[0...100]
+        message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
+      res.send message
 
-  robot.hear /^(?:zendesk|zd) new tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.new, (results) ->
-      ticket_count = results.count
-      msg.send "#{ticket_count} new tickets"
-
-  robot.hear /^(?:zendesk|zd) escalated tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.escalated, (results) ->
-      ticket_count = results.count
-      msg.send "#{ticket_count} escalated tickets"
-
-  robot.hear /^(?:zendesk|zd) open tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.open, (results) ->
-      ticket_count = results.count
-      msg.send "#{ticket_count} open tickets"
-
-  robot.hear /^(?:zendesk|zd) list (all )?tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.unsolved, (results) ->
-      for result in results.results
-        msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}"
-
-  robot.hear /^(?:zendesk|zd) list new tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.new, (results) ->
-      for result in results.results
-        msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}"
-
-  robot.hear /^(?:zendesk|zd) list pending tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.pending, (results) ->
-      for result in results.results
-        msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}"
-
-  robot.hear /^(?:zendesk|zd) list escalated tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.escalated, (results) ->
-      for result in results.results
-        msg.send "Ticket #{result.id} is escalated and #{result.status}: #{tickets_url}/#{result.id}"
-
-  robot.hear /^(?:zendesk|zd) list open tickets$/i, { id: 'zendesk' }, (msg) ->
-    zendesk_request msg, queries.open, (results) ->
-      for result in results.results
-        msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}"
-
-  robot.hear /^(?:zendesk|zd) ticket ([\d]+)$/i, { id: 'zendesk' }, (msg) ->
+  robot.hear /^zendesk get (\d+)$/i, { id: 'zendesk' }, (msg) ->
     ticket_id = msg.match[1]
     zendesk_request msg, "#{queries.tickets}/#{ticket_id}.json", (result) ->
       if result.error
         msg.send result.description
         return
       message = "#{tickets_url}/#{result.ticket.id} ##{result.ticket.id} (#{result.ticket.status.toUpperCase()})"
-      message += "\n>Updated: #{result.ticket.updated_at}"
-      message += "\n>Added: #{result.ticket.created_at}"
-      message += "\n>Description:"
-      message += "\n>-------"
-      message += "\n>#{result.ticket.description}"
+      message += "\n\n> Updated: #{result.ticket.updated_at}"
+      message += "\n> Added: #{result.ticket.created_at}"
+      message += "\n> Description:"
+      message += "\n"
+      message += "\n> #{result.ticket.description}"
       msg.send message
