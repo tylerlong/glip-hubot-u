@@ -1,0 +1,20 @@
+{% if installedApps|length %}
+
+**Installed apps**
+{% for app in installedApps %}
+* {{ app }}
+{% endfor %}
+
+**Other apps**
+{% for app in otherApps %}
+* {{ app }}
+{% endfor %}
+
+{% else %}
+
+**All the apps**
+{% for app in apps %}
+* {{ app }}
+{% endfor %}
+
+{% endif %}

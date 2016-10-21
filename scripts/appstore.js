@@ -1,4 +1,6 @@
 const _ = require('lodash');
+const { engine } = require('../nunjucks');
+
 
 const APP_NAME = 'appstore';
 
@@ -41,19 +43,12 @@ module.exports = (robot) => {
   robot.hear(/^app list$/i, { id: APP_NAME }, (res) => {
     // app 列表
     const apps = getApps(robot);
-
-    let result = '';
-
     // 已安装的 app
     const installedApps = getInstalledApps(apps, robot, res);
-    if(installedApps.length > 0) {
-      result += `**Installed Apps**\n${_.map(installedApps, (app) => { return '* ' + app }).join('\n')}\n\n`;
-    }
+    // other apps
+    const otherApps = _.difference(apps, installedApps);
 
-    // 所有的 app
-    result += `**All Apps**\n${_.map(apps, (app) => { return '* ' + app }).join('\n')}`;
-
-    res.send(result);
+    res.send(engine.render('appstore/list.njk', { apps, installedApps, otherApps }));
   });
 
   // install app
