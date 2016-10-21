@@ -45,7 +45,7 @@ module.exports = (robot) ->
         jiraPattern += "i"
       jiraPattern = eval(jiraPattern)
 
-      robot.hear /^jira move (.+) to (.+)/, id:'jira' , (msg) ->
+      robot.hear /^jira move (.+) to (.+)/, id: 'jira', (msg) ->
         issue = msg.match[1]
         msg.send "Getting transitions for #{issue}"
         robot.http(jiraUrl + "/rest/api/2/issue/#{issue}/transitions")
@@ -64,7 +64,7 @@ module.exports = (robot) ->
               })) (err, res, body) ->
                 msg.send if res.statusCode == 204 then "Success!" else body
 
-      robot.hear /^jira status/, id:'jira', (msg) ->
+      robot.hear /^jira status/, id: 'jira', (msg) ->
         robot.http(jiraUrl + "/rest/api/2/status")
         .auth(auth).get() (err, res, body) ->
           response = "/code "
@@ -72,7 +72,7 @@ module.exports = (robot) ->
             response += status.name + ": " + status.description + '\n'
           msg.send response
 
-      robot.hear jiraPattern, id:'jira', (msg) ->
+      robot.hear jiraPattern, id: 'jira', (msg) ->
         return if msg.message.user.name.match(new RegExp(jiraIgnoreUsers, "gi"))
         return if msg.message.text.match(new RegExp(/move jira (.+) to (.+)/))
 

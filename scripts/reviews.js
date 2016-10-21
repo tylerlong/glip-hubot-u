@@ -1,13 +1,16 @@
 // Description:
 //   Show glip app reviews
 //
+// Commands:
+//   reviews <app name> - List recent 50 reviews of the specific app
+
 const request = require('request');
 const _ = require('lodash');
 
 
 module.exports = (robot) => {
 
-  robot.respond(/reviews$/i, { id: 'appreviews' }, (res) => {
+  robot.hear(/reviews$/i, { id: 'reviews' }, (res) => {
     request({ url: 'https://itunes.apple.com/us/rss/customerreviews/page=1/sortBy=mostRecent/id=715886894/json' }, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
@@ -20,7 +23,7 @@ module.exports = (robot) => {
     });
   });
 
-  robot.respond(/reviews (\d+)$/i, { id: 'appreviews' }, (res) => {
+  robot.hear(/reviews (\d+)$/i, { id: 'reviews' }, (res) => {
     request({ url: 'https://itunes.apple.com/us/rss/customerreviews/page=1/sortBy=mostRecent/id=715886894/json' }, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
