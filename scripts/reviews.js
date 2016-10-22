@@ -140,6 +140,7 @@ const addMonitor = (robot, group, app) => {
         robot.brain.data.reviews.monitors[group][app].latest_id = -1;
       } else {
         robot.brain.data.reviews.monitors[group][app].latest_id = entries[1].id.label;
+        robot.brain.data.reviews.monitors[group][app].name = entries[0]['im:name'].label;
       }
       startMonitor(robot, group, app);
       resolve(null);
@@ -168,7 +169,13 @@ module.exports = (robot) => {
     const group = res.envelope.room;
     addMonitor(robot, group, app).then(() => {
       let message = `App #${app} has been monitored. I will post notifications here whenever there are new reviews for this app.`;
-      message += '\n\n' + engine.render('reviews/monitors.njk', { apps: Object.keys(robot.brain.data.reviews.monitors[group]) });
+      const apps = Object.keys(robot.brain.data.reviews.monitors[group]).map((app) => {
+        return {
+          id: app,
+          name: robot.brain.data.reviews.monitors[group][app].name
+        }
+      });
+      message += '\n\n' + engine.render('reviews/monitors.njk', { apps });
       res.send(message);
     }).catch(() => {
       res.send(`Failed to monitor app #${app}, try again later.`);
@@ -184,7 +191,13 @@ module.exports = (robot) => {
     const group = res.envelope.room;
     removeMonitor(robot, group, app);
     let message = `App #${app} is no longer being monitored.`
-    message += '\n\n' + engine.render('reviews/monitors.njk', { apps: Object.keys(robot.brain.data.reviews.monitors[group]) });
+    const apps = Object.keys(robot.brain.data.reviews.monitors[group]).map((app) => {
+      return {
+        id: app,
+        name: robot.brain.data.reviews.monitors[group][app].name
+      }
+    });
+    message += '\n\n' + engine.render('reviews/monitors.njk', { apps });
     res.send(message);
   });
 
