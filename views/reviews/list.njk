@@ -1,3 +1,5 @@
+**{{ name }}**
+
 {% if reviews|length %}
 {% for review in reviews %}
 #{{ loop.index }} - {% include 'reviews/stars.njk' %} - {{ review.title }}

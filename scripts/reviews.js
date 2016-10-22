@@ -49,13 +49,11 @@ module.exports = (robot) => {
             stars: parseInt(entry['im:rating'].label.trim()),
           }
         });
-        const markdown = engine.render('reviews/list.njk', { reviews });
+        const first = json.feed.entry[0];
+        let name = first['im:name'].label;
+        name += ' ' + first.rights.label;
+        const markdown = engine.render('reviews/list.njk', { name, reviews });
         res.send(markdown);
-        // let result = `#.\tRating\tTitle\n`;
-        // result += _.tail(json.feed.entry).map((entry, index) => {
-        //   return `#${index + 1}.\t${':star:'.repeat(entry['im:rating'].label)}\t${entry.title.label}`;
-        // }).join('\n');
-        // res.send(result);
       }
     });
   });
@@ -68,13 +66,25 @@ module.exports = (robot) => {
       res.send(message);
       return;
     }
-    let number = res.match[2];
+    let number = parseInt(res.match[2]);
+    if(number > 50 || number < 1) {
+      res.send("Currently only the most recent 50 reviews could be retrived.")
+      return;
+    }
     request({ url: `https://itunes.apple.com/us/rss/customerreviews/page=1/sortBy=mostRecent/id=${app}/json` }, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
-        const entry = json.feed.entry[number]
-        const result = `${':star:'.repeat(entry['im:rating'].label)}\t${entry.title.label}\n\n${entry.content.label}`
-        res.send(result);
+        const entry = json.feed.entry[number];
+        const review = {
+          title: entry.title.label.trim(),
+          stars: parseInt(entry['im:rating'].label.trim()),
+          content: entry.content.label,
+        }
+        const first = json.feed.entry[0];
+        let name = first['im:name'].label;
+        name += ' ' + first.rights.label;
+        const markdown = engine.render('reviews/show.njk', { number, name, review });
+        res.send(markdown);
       }
     });
   });
