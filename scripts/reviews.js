@@ -7,6 +7,7 @@
 
 const request = require('request');
 const _ = require('lodash');
+const { engine } = require('../nunjucks');
 
 
 const apps = {
@@ -42,11 +43,19 @@ module.exports = (robot) => {
     request({ url: `https://itunes.apple.com/us/rss/customerreviews/page=1/sortBy=mostRecent/id=${app}/json` }, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const json = JSON.parse(body);
-        let result = `#.\tRating\tTitle\n`;
-        result += _.tail(json.feed.entry).map((entry, index) => {
-          return `#${index + 1}.\t${':star:'.repeat(entry['im:rating'].label)}\t${entry.title.label}`;
-        }).join('\n');
-        res.send(result);
+        const reviews = _.tail(json.feed.entry).map((entry) => {
+          return {
+            title: entry.title.label.trim(),
+            stars: parseInt(entry['im:rating'].label.trim()),
+          }
+        });
+        const markdown = engine.render('reviews/list.njk', { reviews });
+        res.send(markdown);
+        // let result = `#.\tRating\tTitle\n`;
+        // result += _.tail(json.feed.entry).map((entry, index) => {
+        //   return `#${index + 1}.\t${':star:'.repeat(entry['im:rating'].label)}\t${entry.title.label}`;
+        // }).join('\n');
+        // res.send(result);
       }
     });
   });

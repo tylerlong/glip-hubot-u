@@ -1,0 +1,7 @@
+{% if reviews|length %}
+{% for review in reviews %}
+#{{ loop.index }} - {% include 'reviews/stars.njk' %} - {{ review.title }}
+{% endfor %}
+{% else %}
+There are no reviews for the app.
+{% endif %}
