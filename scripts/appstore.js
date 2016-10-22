@@ -12,7 +12,7 @@ const APP_NAME = 'appstore';
 module.exports = (robot) => {
 
   // list app of the apps
-  robot.hear(/^app list$/i, { id: APP_NAME }, (res) => {
+  robot.hear(/^app\s+list$/i, { id: APP_NAME }, (res) => {
     // app 列表
     const apps = getApps(robot);
     // 已安装的 app
@@ -24,7 +24,7 @@ module.exports = (robot) => {
   });
 
   // install app
-  robot.hear(/^app (?:install|add) (.+?)$/i, { id: APP_NAME }, (res) => {
+  robot.hear(/^app\s+(?:install|add)\s+(.+?)$/i, { id: APP_NAME }, (res) => {
     // 用户输入的 app name
     const app = res.match[1].trim();
 
@@ -43,7 +43,7 @@ module.exports = (robot) => {
     res.send(`App **${app}** has been installed.`);
   });
 
-  robot.hear(/^app (?:uninstall|remove) (.+?)$/i, { id: APP_NAME }, (res) => {
+  robot.hear(/^app\s+(?:uninstall|remove|rm|delete)\s+(.+?)$/i, { id: APP_NAME }, (res) => {
     const app = res.match[1].trim();
     const apps = getApps(robot);
 
