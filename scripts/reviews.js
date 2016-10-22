@@ -218,7 +218,7 @@ module.exports = (robot) => {
 
 
   // get a specified review
-  robot.hear(/^reviews\s+([^\s]+?)\s+(\d+)$/i, { id: 'reviews' }, (res) => {
+  robot.hear(/^reviews\s+([^\s]+?)\s+(\d{1,2})$/i, { id: 'reviews' }, (res) => {
     const app = getApp(res);
     if (app == null) {
       return;
