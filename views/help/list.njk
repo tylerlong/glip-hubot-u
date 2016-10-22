@@ -1,7 +1,11 @@
+{% if keyword != true %}
 **Global commands**
+help - Show help information
+help <keyword> - Show help information which contains the keyword
 app list - List all the apps
 app install / add <app_name> - Install an app
 app uninstall / remove / rm / delete <app_name> - Unsintall an app.
+{% endif %}
 
 {% if commands|length %}
 **Commands from installed apps**
