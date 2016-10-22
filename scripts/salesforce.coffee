@@ -12,8 +12,8 @@
 #    SF_PASSWORD = password and security token mashed together
 #
 # Commands:
-#   salesforce account <account_name> - searches for the account by name in Salesforce and displays all matches
-#   salesforce query <query> - runs an arbitrary SOQL query and outputs the results
+#   salesforce search <account_name> - searches for accounts by name
+#   salesforce query <SOQL> - runs an arbitrary SOQL query
 
 
 sf_instance = process.env.SF_INSTANCE_URL
@@ -29,7 +29,7 @@ http = require 'http'
 
 
 module.exports = (robot) ->
-  robot.hear /^salesforce query (.*)$/i, { id: 'salesforce' }, (msg) ->
+  robot.hear /^salesforce\s+query\s+(.*)$/i, { id: 'salesforce' }, (msg) ->
     query = msg.match[1]
 
     msg.http(auth_url).post() (err, res, body) ->
@@ -60,13 +60,13 @@ module.exports = (robot) ->
               message += result_string.substring(0, result_string.length-1) + '\n'
             msg.send message
 
-  robot.hear /^salesforce account (.*)$/i, { id: 'salesforce' }, (msg) ->
+  robot.hear /^salesforce\s+search\s+(.+)$/i, { id: 'salesforce' }, (msg) ->
     acct_name = msg.match[1]
 
     msg.http(auth_url).post() (err, res, body) ->
       oath_token = JSON.parse(body).access_token
 
-      acct_query = "SELECT Owner.Name, Name, Phone, Id From Account where Name = '#{acct_name}'"
+      acct_query = "SELECT Owner.Name, Name, Phone, Id From Account where Name like '%#{acct_name}%'"
       acct_query = encodeURIComponent(acct_query)
 
       msg.http(query_url + acct_query)
@@ -80,7 +80,7 @@ module.exports = (robot) ->
           if accounts.records == undefined || accounts.records.length == 0
             msg.send "No accounts found!"
           else
-            message = "Found #{accounts.records.length} Account(s) matching '#{acct_name}'\n"
+            message = "Found **{accounts.records.length}** Account(s) matching **#{acct_name}**:\n\n"
             for account in accounts.records
               message += "Owner: #{account.Owner.Name}, Name: #{account.Name}, Phone: #{account.Phone}, Id: #{account.Id}\n"
             msg.send message

@@ -8,7 +8,7 @@
 
 module.exports = (robot) ->
 
-  robot.hear /^stock (\S+)$/i, { id: 'stock' }, (msg) ->
+  robot.hear /^stock\s+(\S+)$/i, { id: 'stock' }, (msg) ->
     ticker = escape(msg.match[1])
     msg.http('http://finance.google.com/finance/info?client=ig&q=' + ticker)
     .get() (err, res, body) ->
@@ -18,7 +18,7 @@ module.exports = (robot) ->
       catch error
         msg.send "Error fetching stock :( " + err
 
-  robot.hear /^stock chart\s?@?([A-Za-z0-9.-_]+)\s?(\d+\w+)?/i, { id: 'stock' }, (msg) ->
+  robot.hear /^stock\s+chart\s?@?([A-Za-z0-9.-_]+)\s?(\d+\w+)?/i, { id: 'stock' }, (msg) ->
     ticker = escape(msg.match[1])
     time = msg.match[2] || '1d'
     msg.http('http://finance.google.com/finance/info?client=ig&q=' + ticker)

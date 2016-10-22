@@ -11,7 +11,7 @@ const { send_markdown } = require('../markdown');
 
 module.exports = (robot) => {
 
-  robot.hear(/^markdown (.+?)$/i, { id: 'markdown' }, (res) => {
+  robot.hear(/^markdown\s+(.+?)$/i, { id: 'markdown' }, (res) => {
     send_markdown(res.match[1], robot, res);
   });
 

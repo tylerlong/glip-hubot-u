@@ -1,3 +1,5 @@
+**Glip tasks for this Group with assignees**
+
 {% if tasks|length %}
 {% for task in tasks %}
 #{{ loop.index }} - **{{ task.title }}** assigned to {% if task.assignee %}**{{ task.assignee }}**{% else %}nobody{% endif %}

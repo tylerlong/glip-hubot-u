@@ -7,7 +7,7 @@
 math = require('mathjs');
 
 module.exports = (robot) ->
-  robot.hear /^math (.+?)$/i, { id: 'math' }, (res) ->
+  robot.hear /^math\s+(.+?)$/i, { id: 'math' }, (res) ->
     try
       res.send "#{res.match[1]} = #{math.eval res.match[1]}"
     catch error

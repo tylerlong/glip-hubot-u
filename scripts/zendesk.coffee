@@ -58,18 +58,18 @@ zendesk_user = (msg, user_id) ->
 
 module.exports = (robot) ->
 
-  robot.hear /^zendesk count (unsolved|new|open|pending|escalated)/i, { id: 'zendesk' }, (res) ->
+  robot.hear /^zendesk\s+count\s+(unsolved|new|open|pending|escalated)/i, { id: 'zendesk' }, (res) ->
     zendesk_request res, queries[res.match[1]], (results) ->
       res.send "#{results.count} #{res.match[1]} tickets"
 
-  robot.hear /^zendesk list (unsolved|new|open|pending|escalated)/i, { id: 'zendesk' }, (res) ->
+  robot.hear /^zendesk\s+list\s+(unsolved|new|open|pending|escalated)/i, { id: 'zendesk' }, (res) ->
     zendesk_request res, queries[res.match[1]], (results) ->
       message = ''
       for result in results.results[0...100]
         message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
       res.send message
 
-  robot.hear /^zendesk get (\d+)$/i, { id: 'zendesk' }, (msg) ->
+  robot.hear /^zendesk\s+get\s+(\d+)$/i, { id: 'zendesk' }, (msg) ->
     ticket_id = msg.match[1]
     zendesk_request msg, "#{queries.tickets}/#{ticket_id}.json", (result) ->
       if result.error
