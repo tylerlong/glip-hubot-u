@@ -1,0 +1,8 @@
+{% if tasks|length %}
+{% for task in tasks %}
+#{{ loop.index }} - **{{ task.title }}** assigned to {% if task.assignee %}**{{ task.assignee }}**{% else %}nobody{% endif %}
+
+{% endfor %}
+{% else %}
+No tasks found for the current group.
+{% endif %}

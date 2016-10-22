@@ -6,6 +6,7 @@
 
 const _ = require('lodash');
 const { glip_request } = require('../glip');
+const { engine } = require('../nunjucks');
 
 
 module.exports = (robot) => {
@@ -20,10 +21,14 @@ module.exports = (robot) => {
       Promise.all(tasks.map((task) => {
         return glip_request(robot, '/api/person/' + task.assigned_to_ids[0], 'GET', {})
       })).then((persons) => {
-        const message = tasks.map((task, index) => {
-          return `* **${task.text}** assigned to **${persons[index].body.display_name}**`;
-        }).join('\n');
-        res.send(message);
+        tasks = tasks.map((task, index) => {
+          return {
+            title: task.text,
+            assignee: persons[index].body.display_name
+          };
+        });
+        const markdown = engine.render('tasks/list.njk', { tasks });
+        res.send(markdown);
       }).catch(() => {
         res.send('Unable to retrive tasks at the moment');
       });
