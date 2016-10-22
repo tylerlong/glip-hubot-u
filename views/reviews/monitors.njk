@@ -1,0 +1,8 @@
+{% if apps|length %}
+Currently the following apps are being monitored for this group:
+{% for app in apps %}
+* {{ app }}
+{% endfor %}
+{% else %}
+Currently no app is being monitored for this group.
+{% endif %}

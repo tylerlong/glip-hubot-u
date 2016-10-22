@@ -6,6 +6,7 @@
   "description": "Watchman, the chatbot for hackathon",
   "dependencies": {
     "coffee-script": "^1.11.1",
+    "cron": "^1.1.1",
     "emojione": "^2.2.6",
     "htmlparser": "1.7.6",
     "hubot": "^2.19.0",
