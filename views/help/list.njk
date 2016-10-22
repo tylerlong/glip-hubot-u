@@ -1,0 +1,11 @@
+**Global commands**
+app list - List all the apps
+app install / add <app_name> - Install an app
+app uninstall / remove / rm / delete <app_name> - Unsintall an app.
+
+{% if commands|length %}
+**Commands from installed apps**
+{% for command in commands %}
+{{ command }}
+{% endfor %}
+{% endif %}
