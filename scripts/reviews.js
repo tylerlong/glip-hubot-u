@@ -6,12 +6,14 @@
 //   reviews <app name or ID> <n> - Show detail of No. #n review of the specified app
 //   reviews monitor <app name or ID> - monitor the app, post notifications for new reviews
 //   reviews unmonitor <app name or ID> - unmonitor the specified app
+//   reviews pie <app name or ID> - Pie chart of the most recent 100 reviews of the specified app
 
 const request = require('request');
 const _ = require('lodash');
 const { engine } = require('../nunjucks');
 const { CronJob } = require('cron');
 const { TextMessage, User } = require('hubot');
+const { send_markdown } = require('../markdown');
 
 
 // RingCental apps
@@ -259,6 +261,39 @@ module.exports = (robot) => {
       res.send(markdown);
     }).catch(() => {
       res.send('Error fetching review');
+    });
+  });
+
+
+  // pie chart of the most recent 100 reviews.
+  robot.hear(/^reviews\s+pie\s+([^\s]+?)$/i, { id: 'reviews' }, (res) => {
+    const app = getApp(res);
+    if (app == null) {
+      return;
+    }
+    Promise.all([1, 2].map((page) => {
+      return getReviews(app, page);
+    })).then((arrays) => {
+      let reviews = arrays[0];
+      if(reviews.length < 2) {
+        res.send("There aren't enough reviews to generate a chart");
+        return;
+      }
+      const first = reviews[0];
+      let name = first['im:name'].label;
+      reviews = _.tail(reviews);
+      if(arrays[1].length > 1) {
+        reviews = _.concat(reviews, _.tail(arrays[1]));
+      }
+      const stars = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      _.forEach(reviews, (review) => {
+        stars[review['im:rating'].label] += 1;
+      });
+      const markdown = engine.render('reviews/pie.njk', { name, stars });
+      send_markdown(markdown, robot, res);
+    }).catch((error) => {
+      console.log(error);
+      res.send('Error fetching reviews')
     });
   });
 

@@ -1,0 +1,43 @@
+# Pie Chart for {{ name }}
+
+```chart
+{
+  "type": "pie",
+  "data": {
+    "labels": [
+      "1-stars",
+      "2-stars",
+      "3-stars",
+      "4-stars",
+      "5-stars"
+    ],
+    "datasets": [
+      {
+        "data": [
+          {{ stars['1'] }},
+          {{ stars['2'] }},
+          {{ stars['3'] }},
+          {{ stars['4'] }},
+          {{ stars['5'] }}
+        ],
+        "backgroundColor": [
+          "#FF6384",
+          "#FFCE56",
+          "#E7E9ED",
+          "#36A2EB",
+          "#4BC0C0"
+        ]
+      }
+    ]
+  }
+}
+
+
+## Statistics
+
+- 1-stars: {{ stars['1'] }}
+- 2-stars: {{ stars['2'] }}
+- 3-stars: {{ stars['3'] }}
+- 4-stars: {{ stars['4'] }}
+- 5-stars: {{ stars['5'] }}
+```
