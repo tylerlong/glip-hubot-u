@@ -9,10 +9,10 @@ module.exports = function(robot) {
   robot.listenerMiddleware(function(context, next, done){
 
     // don't process message posted by bot itself
-    // if(context.response.envelope.user.id == robot.adapter.client.user_id) {
-    //   done();
-    //   return;
-    // }
+    if(context.response.envelope.user.id == robot.adapter.client.user_id) {
+      done();
+      return;
+    }
 
     const room = context.response.envelope.room;
     const app = context.listener.options.id;
