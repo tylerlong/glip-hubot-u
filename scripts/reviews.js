@@ -79,7 +79,7 @@ const startMonitor = (robot, group, app) => {
     getReviews(app, 1).then((entries) => {
       if (entries.length > 1) {
         const latest_id = entries[1].id.label;
-        if (latest_id != robot.brain.data.reviews.monitors[group][app].latest_id) {
+        if (!_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latest_id)) {
 
           // receive a fake message to trigger displaying of the first review
           const user = new User('fake-user', {
@@ -91,7 +91,8 @@ const startMonitor = (robot, group, app) => {
           robot.adapter.robot.receive(message);
 
           // don't forget to save the latest ID
-          robot.brain.data.reviews.monitors[group][app].latest_id = latest_id;
+          robot.brain.data.reviews.monitors[group][app].latest_ids.push(latest_id);
+          robot.brain.data.reviews.monitors[group][app].latest_ids = _.takeRight(robot.brain.data.reviews.monitors[group][app].latest_ids, 10);
         }
       }
     }).catch(() => {
@@ -139,9 +140,9 @@ const addMonitor = (robot, group, app) => {
     // fetch initial data
     getReviews(app, 1).then((entries) => {
       if (entries.length < 2) {
-        robot.brain.data.reviews.monitors[group][app].latest_id = -1;
+        robot.brain.data.reviews.monitors[group][app].latest_ids = [];
       } else {
-        robot.brain.data.reviews.monitors[group][app].latest_id = entries[1].id.label;
+        robot.brain.data.reviews.monitors[group][app].latest_ids = [entries[1].id.label];
         robot.brain.data.reviews.monitors[group][app].name = entries[0]['im:name'].label;
       }
       startMonitor(robot, group, app);
