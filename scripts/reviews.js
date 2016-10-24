@@ -142,7 +142,7 @@ const addMonitor = (robot, group, app) => {
       if (entries.length < 2) {
         robot.brain.data.reviews.monitors[group][app].latest_ids = [];
       } else {
-        robot.brain.data.reviews.monitors[group][app].latest_ids = [entries[1].id.label];
+        robot.brain.data.reviews.monitors[group][app].latest_ids = _.map(_.take(_.tail(entries), 10), 'id.label');
         robot.brain.data.reviews.monitors[group][app].name = entries[0]['im:name'].label;
       }
       startMonitor(robot, group, app);
@@ -276,14 +276,14 @@ module.exports = (robot) => {
       return getReviews(app, page);
     })).then((arrays) => {
       let reviews = arrays[0];
-      if(reviews.length < 2) {
+      if (reviews.length < 2) {
         res.send("There aren't enough reviews to generate a chart");
         return;
       }
       const first = reviews[0];
       let name = first['im:name'].label;
       reviews = _.tail(reviews);
-      if(arrays[1].length > 1) {
+      if (arrays[1].length > 1) {
         reviews = _.concat(reviews, _.tail(arrays[1]));
       }
       const stars = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -296,6 +296,15 @@ module.exports = (robot) => {
       console.log(error);
       res.send('Error fetching reviews')
     });
+  });
+
+  robot.hear(/!reviews reset!/, { id: 'reviews' }, (res) => {
+    _.forEach(Object.keys(robot.brain.data.reviews.monitors), (group) => {
+      _.forEach(Object.keys(robot.brain.data.reviews.monitors[group]), (app) => {
+        addMonitor(robot, group, app);
+      });
+    });
+    res.send('reviews monitors have been reset');
   });
 
 }
