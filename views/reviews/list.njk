@@ -2,7 +2,7 @@
 
 {% if reviews|length %}
 {% for review in reviews %}
-#{{ loop.index }} - {% include 'reviews/stars.njk' %} - by {{ review.author }} - {{ review.title }}
+#{{ loop.index }} - {% include 'reviews/stars.njk' %} - by {% include 'reviews/author.njk' %} - {{ review.title }}
 {% endfor %}
 {% else %}
 There are no reviews for the app.

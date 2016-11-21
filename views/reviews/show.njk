@@ -2,6 +2,6 @@
 
 {% include 'reviews/stars.njk' %} - {{ review.title }}
 
-by {{ review.author }}
+by {% include 'reviews/author.njk' %}
 
 {{ review.content }}
