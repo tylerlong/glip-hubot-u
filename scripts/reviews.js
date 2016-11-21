@@ -255,6 +255,7 @@ module.exports = (robot) => {
         title: entry.title.label.trim(),
         stars: parseInt(entry['im:rating'].label.trim()),
         content: entry.content.label,
+        author: entry.author.name.label,
       }
       const first = entries[0];
       let name = first['im:name'].label;
