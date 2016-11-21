@@ -28,3 +28,5 @@ SF_PASSWORD=*** \
 You don't need to specify all of the credentials in order to run this project.
 
 For example, if you don't want to support ZendDesk and SalessForce, you can leave their credentials empty.
+
+Mandatory configuration items are `HUBOT_GLIP_EMAIL` and `HUBOT_GLIP_PASSWORD`.
