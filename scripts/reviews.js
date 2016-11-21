@@ -220,6 +220,7 @@ module.exports = (robot) => {
         return {
           title: entry.title.label.trim(),
           stars: parseInt(entry['im:rating'].label.trim()),
+          author: entry.author.name.label,
         }
       });
       const first = entries[0];
