@@ -254,7 +254,7 @@ module.exports = (robot) => {
       const review = {
         title: entry.title.label.trim(),
         stars: parseInt(entry['im:rating'].label.trim()),
-        content: entry.content.label,
+        content: entry.content.label.split('\n').map((line) => '> ' + line).join('\n'),
         author: entry.author.name.label,
       }
       const first = entries[0];
