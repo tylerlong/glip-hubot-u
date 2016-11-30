@@ -77,24 +77,24 @@ const startMonitor = (robot, group, app) => {
   const monitor = new CronJob('0 */10 * * * *', () => {
     // the content of the cron job
     getReviews(app, 1).then((entries) => {
-      if (entries.length > 1) {
-        const latest_id = entries[1].id.label;
-        if (!_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latest_id)) {
-
-          // receive a fake message to trigger displaying of the first review
-          const user = new User('fake-user', {
-            room: parseInt(group),
-            reply_to: parseInt(group),
-            name: "Fake message"
-          });
-          const message = new TextMessage(user, `reviews ${app} 1`, `MSG-${new Date().getTime()}`);
-          robot.adapter.robot.receive(message);
-
-          // don't forget to save the latest ID
-          robot.brain.data.reviews.monitors[group][app].latest_ids.push(latest_id);
-          robot.brain.data.reviews.monitors[group][app].latest_ids = _.takeRight(robot.brain.data.reviews.monitors[group][app].latest_ids, 10);
+      for (let i = 1; i < Math.min(9, entries.length); i++) {
+        const latest_id = entries[i].id.label;
+        if (_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latest_id)) {
+          break;
         }
-      }
+        // receive a fake message to trigger displaying of the first review
+        const user = new User('fake-user', {
+          room: parseInt(group),
+          reply_to: parseInt(group),
+          name: "Fake message"
+        });
+        const message = new TextMessage(user, `reviews ${app} 1`, `MSG-${new Date().getTime()}`);
+        robot.adapter.robot.receive(message);
+
+        // don't forget to save the latest ID
+        robot.brain.data.reviews.monitors[group][app].latest_ids.push(latest_id);
+        robot.brain.data.reviews.monitors[group][app].latest_ids = _.takeRight(robot.brain.data.reviews.monitors[group][app].latest_ids, 10);
+      } // end-for
     }).catch(() => {
       // cron job failed, do nothing
     });
