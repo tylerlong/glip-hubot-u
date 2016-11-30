@@ -225,7 +225,7 @@ module.exports = (robot) => {
       });
       const first = entries[0];
       let name = first['im:name'].label;
-      name += ' ' + first.rights.label;
+      // name += ' ' + first.rights.label;
       const markdown = engine.render('reviews/list.njk', { name, reviews });
       res.send(markdown);
     }).catch(() => {
@@ -259,7 +259,7 @@ module.exports = (robot) => {
       }
       const first = entries[0];
       let name = first['im:name'].label;
-      name += ' ' + first.rights.label;
+      // name += ' ' + first.rights.label;
       const markdown = engine.render('reviews/show.njk', { number, name, review });
       res.send(markdown);
     }).catch(() => {
