@@ -260,7 +260,7 @@ module.exports = (robot) => {
       const first = entries[0];
       let name = first['im:name'].label;
       // name += ' ' + first.rights.label;
-      const markdown = engine.render('reviews/show.njk', { number, name, review, new: (res.match[3] == 'new') });
+      const markdown = engine.render('reviews/show.njk', { number, name, review, new: (res.match[3].trim() == 'new') });
       res.send(markdown);
     }).catch(() => {
       res.send('Error fetching review');
