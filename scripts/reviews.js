@@ -88,7 +88,7 @@ const startMonitor = (robot, group, app) => {
           reply_to: parseInt(group),
           name: "Fake message"
         });
-        const message = new TextMessage(user, `reviews ${app} ${i}`, `MSG-${new Date().getTime()}`);
+        const message = new TextMessage(user, `reviews ${app} ${i} new`, `MSG-${new Date().getTime()}`);
         robot.adapter.robot.receive(message);
 
         // don't forget to save the latest ID
@@ -235,7 +235,7 @@ module.exports = (robot) => {
 
 
   // get a specified review
-  robot.hear(/^reviews\s+([^\s]+?)\s+(\d{1,2})$/i, { id: 'reviews' }, (res) => {
+  robot.hear(/^reviews\s+([^\s]+?)\s+(\d{1,2})(\s+new)?$/i, { id: 'reviews' }, (res) => {
     const app = getApp(res);
     if (app == null) {
       return;
@@ -260,7 +260,7 @@ module.exports = (robot) => {
       const first = entries[0];
       let name = first['im:name'].label;
       // name += ' ' + first.rights.label;
-      const markdown = engine.render('reviews/show.njk', { number, name, review });
+      const markdown = engine.render('reviews/show.njk', { number, name, review, new: (res.match[3] == 'new') });
       res.send(markdown);
     }).catch(() => {
       res.send('Error fetching review');
