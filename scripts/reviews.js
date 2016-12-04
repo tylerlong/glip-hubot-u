@@ -88,7 +88,7 @@ const startMonitor = (robot, group, app) => {
           reply_to: parseInt(group),
           name: "Fake message"
         });
-        const message = new TextMessage(user, `reviews ${app} 1`, `MSG-${new Date().getTime()}`);
+        const message = new TextMessage(user, `reviews ${app} ${i}`, `MSG-${new Date().getTime()}`);
         robot.adapter.robot.receive(message);
 
         // don't forget to save the latest ID
