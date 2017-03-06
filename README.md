@@ -10,6 +10,7 @@ It's currently running in RingCentral with the name ***Co-Bot***.
 ```
 HUBOT_GLIP_EMAIL=*** \
 HUBOT_GLIP_PASSWORD=*** \
+HUBOT_GLIP_HOST=app.glip.com \
 GLIP_BOT_HOST=*** \
 HUBOT_JIRA_USERNAME=*** \
 HUBOT_JIRA_PASSWORD=*** \

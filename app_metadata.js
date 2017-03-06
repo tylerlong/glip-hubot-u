@@ -31,4 +31,4 @@ const apps = {
 
 }
 
-module.exports = { apps };
+module.exports = { apps }

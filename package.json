@@ -2,6 +2,9 @@
   "name": "glip-hubot-u",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "upgrade": "ncu -ua && yarn upgrade"
+  },
   "author": "Tyler Long <tyler4long@gmail.com>",
   "description": "Watchman, the chatbot for hackathon",
   "dependencies": {
@@ -26,6 +29,6 @@
     "node": "7.x"
   },
   "devDependencies": {
-    "eslint": "^3.8.1"
+    "standard": "^9.0.0"
   }
 }

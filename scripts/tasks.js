@@ -4,20 +4,17 @@
 // Commands:
 //   tasks - List Glip tasks per Group with assignees
 
-const _ = require('lodash');
-const { glip_request } = require('../glip');
-const { engine } = require('../nunjucks');
-
+const _ = require('lodash')
+const { glip_request } = require('../glip')
+const { engine } = require('../nunjucks')
 
 module.exports = (robot) => {
-
   robot.hear(/^tasks$/i, { id: 'tasks' }, (res) => {
-
     glip_request(robot, '/api/items', 'GET', { type_id: 9, group_id: res.envelope.room }).then((pack) => {
-      let tasks = pack.body;
+      let tasks = pack.body
       tasks = _.filter(tasks, (task) => {
-        return task.complete == false && _.includes(task.group_ids, res.envelope.room);
-      });
+        return task.complete === false && _.includes(task.group_ids, res.envelope.room)
+      })
       Promise.all(tasks.map((task) => {
         return glip_request(robot, '/api/person/' + task.assigned_to_ids[0], 'GET', {})
       })).then((persons) => {
@@ -25,23 +22,20 @@ module.exports = (robot) => {
           return {
             title: task.text,
             assignee: persons[index].body.display_name
-          };
-        });
-        const markdown = engine.render('tasks/list.njk', { tasks });
-        res.send(markdown);
+          }
+        })
+        const markdown = engine.render('tasks/list.njk', { tasks })
+        res.send(markdown)
       }).catch(() => {
-        res.send('Unable to retrive tasks at the moment');
-      });
+        res.send('Unable to retrive tasks at the moment')
+      })
     }).catch(() => {
-      res.send('Unable to retrive tasks at the moment');
-    });
-  });
-
+      res.send('Unable to retrive tasks at the moment')
+    })
+  })
 }
 
-
-
-///////// task: ///////////
+/// ////// task: ///////////
 // { _id: 23024762889,
 //     created_at: 1477048935703,
 //     creator_id: 3195740163,
@@ -66,8 +60,7 @@ module.exports = (robot) => {
 //     modified_at: 1477048935730,
 //     deactivated: false },
 
-
-/////// user: //////////
+/// //// user: //////////
 //  { body:
 //      { _id: 4627939331,
 //        created_at: 1476870574836,
