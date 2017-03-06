@@ -1,10 +1,7 @@
 const _ = require('lodash')
 const { getApps, getInstalledApps } = require('../apps')
 const { engine } = require('../nunjucks')
-const uuid = require('uuid')
-const spawn = require('child_process').spawnSync
 const appMetadata = require('../app_metadata')
-const {send_markdown} = require('../markdown')
 
 const APP_NAME = 'appstore'
 

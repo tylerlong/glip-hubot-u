@@ -22,7 +22,7 @@ module.exports = function (robot) {
     }
 
     // 在数据库白名单查找，当前 room 是否 install 了当前 app。
-    if (robot.brain.data.appstore[room] && robot.brain.data.appstore[room][app] == true) {
+    if (robot.brain.data.appstore[room] && robot.brain.data.appstore[room][app] === true) {
       // 白名单验证通过
       next(done)
     } else {
