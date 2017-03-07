@@ -72,7 +72,7 @@ const startMonitor = (robot, group, app) => {
   const monitor = new CronJob('0 */10 * * * *', () => {
     // the content of the cron job
     getReviews(app, 1).then((entries) => {
-      for (let i = 1; i < Math.min(9, entries.length); i++) {
+      for (let i = 1; i < Math.min(49, entries.length); i++) {
         const latest_id = entries[i].id.label
         if (_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latest_id)) {
           break
@@ -88,7 +88,7 @@ const startMonitor = (robot, group, app) => {
 
         // don't forget to save the latest ID
         robot.brain.data.reviews.monitors[group][app].latest_ids.push(latest_id)
-        robot.brain.data.reviews.monitors[group][app].latest_ids = _.takeRight(robot.brain.data.reviews.monitors[group][app].latest_ids, 10)
+        robot.brain.data.reviews.monitors[group][app].latest_ids = _.takeRight(robot.brain.data.reviews.monitors[group][app].latest_ids, 50)
       } // end-for
     }).catch(() => {
       // cron job failed, do nothing
@@ -134,7 +134,7 @@ const addMonitor = (robot, group, app) => {
       if (entries.length < 2) {
         robot.brain.data.reviews.monitors[group][app].latest_ids = []
       } else {
-        robot.brain.data.reviews.monitors[group][app].latest_ids = _.map(_.take(_.tail(entries), 10), 'id.label')
+        robot.brain.data.reviews.monitors[group][app].latest_ids = _.map(_.take(_.tail(entries), 50), 'id.label')
         robot.brain.data.reviews.monitors[group][app].name = entries[0]['im:name'].label
       }
       startMonitor(robot, group, app)
