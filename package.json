@@ -8,18 +8,18 @@
   "author": "Tyler Long <tyler4long@gmail.com>",
   "description": "Watchman, the chatbot for hackathon",
   "dependencies": {
-    "coffee-script": "^1.12.4",
+    "coffee-script": "^1.12.5",
     "cron": "^1.2.1",
-    "emojione": "^2.2.7",
+    "emojione": "^3.0.0",
     "htmlparser": "1.7.7",
     "hubot": "^2.19.0",
-    "hubot-glip": "^0.8.6",
+    "hubot-glip": "^2.0.2",
     "hubot-redis-brain": "0.0.3",
     "lodash": "^4.17.4",
-    "mathjs": "^3.10.0",
+    "mathjs": "^3.12.0",
     "nunjucks": "^3.0.0",
-    "phantomjs": "^2.1.7",
-    "request": "^2.80.0",
+    "phantomjs-prebuilt": "^2.1.14",
+    "request": "^2.81.0",
     "soupselect": "0.2.0",
     "underscore": "1.8.3",
     "underscore.string": "3.3.4",
@@ -29,7 +29,7 @@
     "node": "7.x"
   },
   "devDependencies": {
-    "npm-check-updates": "^2.10.3",
-    "standard": "^9.0.0"
+    "npm-check-updates": "^2.11.0",
+    "standard": "^10.0.2"
   }
 }
