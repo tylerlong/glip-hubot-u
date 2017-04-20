@@ -10,10 +10,10 @@ page.open('index.html', function (status) {
   const data = system.args[1]
   const uid = system.args[2]
   page.evaluate(function (data) {
-    mdc.init(data, false)
+    window.mdc.init(data, false)
   }, data)
   setTimeout(function () {
     page.render('static/' + uid + '.png')
-    phantom.exit()
+    global.phantom.exit()
   }, 1000)
 })

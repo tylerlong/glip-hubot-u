@@ -13,7 +13,7 @@ const _ = require('lodash')
 const { engine } = require('../nunjucks')
 const { CronJob } = require('cron')
 const { TextMessage, User } = require('hubot')
-const { send_markdown } = require('../markdown')
+const { sendMarkdown } = require('../markdown')
 
 // RingCental apps
 const apps = {
@@ -73,8 +73,8 @@ const startMonitor = (robot, group, app) => {
     // the content of the cron job
     getReviews(app, 1).then((entries) => {
       for (let i = 1; i < Math.min(49, entries.length); i++) {
-        const latest_id = entries[i].id.label
-        if (_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latest_id)) {
+        const latestId = entries[i].id.label
+        if (_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latestId)) {
           break
         }
         // receive a fake message to trigger displaying of the first review
@@ -87,7 +87,7 @@ const startMonitor = (robot, group, app) => {
         robot.adapter.robot.receive(message)
 
         // don't forget to save the latest ID
-        robot.brain.data.reviews.monitors[group][app].latest_ids.push(latest_id)
+        robot.brain.data.reviews.monitors[group][app].latest_ids.push(latestId)
         robot.brain.data.reviews.monitors[group][app].latest_ids = _.takeRight(robot.brain.data.reviews.monitors[group][app].latest_ids, 50)
       } // end-for
     }).catch(() => {
@@ -280,7 +280,7 @@ module.exports = (robot) => {
         stars[review['im:rating'].label] += 1
       })
       const markdown = engine.render('reviews/pie.njk', { name, stars })
-      send_markdown(markdown, robot, res)
+      sendMarkdown(markdown, robot, res)
     }).catch((error) => {
       console.log(error)
       res.send('Error fetching reviews')

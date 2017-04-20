@@ -12,7 +12,7 @@ const getCommands = (robot, res) => {
   let commands = []
   if (installedApps.length > 0) {
     const regexStr = '/^' + installedApps.join('\\s+|^') + '\\b/'
-    const regex = eval(regexStr)
+    const regex = eval(regexStr) // eslint-disable-line no-eval
     commands = _.filter(robot.helpCommands(), (command) => {
       return command.match(regex) != null
     })

@@ -5,18 +5,18 @@
 //   tasks - List Glip tasks per Group with assignees
 
 const _ = require('lodash')
-const { glip_request } = require('../glip')
+const { glipRequest } = require('../glip')
 const { engine } = require('../nunjucks')
 
 module.exports = (robot) => {
   robot.hear(/^tasks$/i, { id: 'tasks' }, (res) => {
-    glip_request(robot, '/api/items', 'GET', { type_id: 9, group_id: res.envelope.room }).then((pack) => {
+    glipRequest(robot, '/api/items', 'GET', { type_id: 9, group_id: res.envelope.room }).then((pack) => {
       let tasks = pack.body
       tasks = _.filter(tasks, (task) => {
         return task.complete === false && _.includes(task.group_ids, res.envelope.room)
       })
       Promise.all(tasks.map((task) => {
-        return glip_request(robot, '/api/person/' + task.assigned_to_ids[0], 'GET', {})
+        return glipRequest(robot, '/api/person/' + task.assigned_to_ids[0], 'GET', {})
       })).then((persons) => {
         tasks = tasks.map((task, index) => {
           return {

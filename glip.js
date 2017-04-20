@@ -1,4 +1,4 @@
-const glip_request = (robot, endpoint, method, options) => {
+const glipRequest = (robot, endpoint, method, options) => {
   return new Promise((resolve, reject) => {
     robot.adapter.client.request(endpoint, method, options, (error, pack) => {
       if (error) {
@@ -9,4 +9,4 @@ const glip_request = (robot, endpoint, method, options) => {
   })
 }
 
-module.exports = { glip_request }
+module.exports = { glipRequest }
