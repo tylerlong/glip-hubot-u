@@ -240,6 +240,7 @@ module.exports = (robot) => {
       }
       const entry = entries[number]
       const review = {
+        id: entry.id.label,
         title: entry.title.label.trim(),
         stars: parseInt(entry['im:rating'].label.trim()),
         content: entry.content.label.split('\n').map((line) => '> ' + line).join('\n'),
