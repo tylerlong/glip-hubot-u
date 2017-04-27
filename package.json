@@ -13,7 +13,7 @@
     "emojione": "^3.0.1",
     "htmlparser": "1.7.7",
     "hubot": "^2.19.0",
-    "hubot-glip": "^2.0.2",
+    "hubot-glip": "0.9.0",
     "hubot-redis-brain": "0.0.3",
     "lodash": "^4.17.4",
     "mathjs": "^3.12.1",
