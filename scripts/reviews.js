@@ -73,7 +73,7 @@ const startMonitor = (robot, group, app) => {
     // the content of the cron job
     getReviews(app, 1).then((entries) => {
       for (let i = 1; i < Math.min(49, entries.length); i++) {
-        const latestId = entries[i].id.label
+        const latestId = entries[i].id.label + '' // convert to string
         if (_.includes(robot.brain.data.reviews.monitors[group][app].latest_ids, latestId)) {
           break
         }
